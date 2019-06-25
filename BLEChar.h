@@ -1,37 +1,37 @@
 #ifndef BLE_CHAR_H
 #define BLE_CHAR_H
 
-#include "mbed.h"
 #include "ble/BLE.h"
 #include "ble/Gap.h"
+#include "mbed.h"
 
+class BLEChar {
+public:
+  // enum BLECharProps {
+  //     NONE = GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_NONE,
+  //     READ = GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ,
+  //     WRITE = GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_WRITE,
+  // };
 
-class BLEChar
-{
-    public:
+  BLEChar(const UUID &uuid, uint8_t properties, uint16_t size);
 
-        // enum BLECharProps {
-        //     NONE = GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_NONE,
-        //     READ = GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ,
-        //     WRITE = GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_WRITE,
-        // };
+  void readAuth(GattReadAuthCallbackParams *params);
+  void writeAuth(GattWriteAuthCallbackParams *params);
 
-        BLEChar(
-            const UUID &uuid, 
-            uint8_t properties, 
-            uint8_t size
-        );
+  Callback<void(void)> *readCb;
+  Callback<void(void)> *writeCb;
+  // private:
+  uint8_t *value;
+  uint16_t size;
+  GattCharacteristic *charac;
 
-        void readAuth(GattReadAuthCallbackParams *params);
-        void writeAuth(GattWriteAuthCallbackParams *params);
+  void setShortVal(int16_t val);
+  void setTrippleShortVal(int16_t val0, int16_t val1, int16_t val2);
+  void setQuatShortVal(int16_t val0, int16_t val1, int16_t val2, int16_t val3);
+  void setIntVal(int32_t val);
+  void setFloatVal(float val);
 
-        Callback<void(void)> *readCb;
-        Callback<void(void)> *writeCb;
-    //private:
-        uint8_t *value;
-        GattCharacteristic *charac;
-
-        void setIntVal(int32_t val);
+  static void emptyFct(void);
 };
 
 #endif
