@@ -39,14 +39,17 @@ BLEChar::BLEChar(const UUID &uuid, uint8_t properties, uint16_t size): size(size
 void BLEChar::readAuth(GattReadAuthCallbackParams *params) {
   // pc2.printf("readAuth %x\n\r",
   // this->charac->getValueAttribute().getUUID().getShortUUID());
-
+  params->authorizationReply = AUTH_CALLBACK_REPLY_SUCCESS;
   this->readCb->call();
-  BLE::Instance(BLE::DEFAULT_INSTANCE)
-      .gattServer()
-      .write(this->charac->getValueHandle(), this->value, this->size);
+  // BLE::Instance()//BLE::DEFAULT_INSTANCE
+  //     .gattServer()
+  //     .write(this->charac->getValueHandle(), this->value, this->size);
+  params->data = this->value;
+  params->len = this->size;
 }
 
 void BLEChar::writeAuth(GattWriteAuthCallbackParams *params) {
+  params->authorizationReply = AUTH_CALLBACK_REPLY_SUCCESS;
   memcpy(this->value, params->data, params->len);
   this->writeCb->call();
 }
